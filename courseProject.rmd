@@ -1,0 +1,54 @@
+Practical Machine Learning Project - Writeup
+========================================================
+## Synopsis
+In this report we aim to build a machine learning algorithm to predict activity quality from activity monitors. The data was pre divided into training and testing dataset. The traing dataset was first cleaned up in the following procedure: (1) get the response variable classe into a vector, named classe; (2) remove the non numeric variables; (3) remove the variables which are NA across the whole dataset; (4) remove the X variable; (5) combine the classe with the remaining dataset. After the cleaning, there are 56 variables left to use as predictors to predict the classe variable. Random forest algorith was used to build the classification trees, 10 cross validation was used for resampling and building the trees, 200 trees were evaluated. The final model was evaluated and it has a 0.04% out of sample errors. The model was used to predict the 20 samples in the testing dataset, and 100% accuracy was obtained.
+
+
+## Load the package needed for the tree classification
+```{r}
+library(caret)
+```
+## Load the data
+```{r}
+training <- read.csv("pml-training.csv")
+testing <- read.csv("pml-testing.csv")
+```
+## Cleaning the data
+The training dataset was first cleaned up using a series round of criteria. First, the classe was extracted and stored in a new variable; second, the non numeric variables were removed; third, the variables with all NA across the whole dataset were removed, these variables' names have some common characteristics, they are stared with max, min, avg, var, stddev, amp; forth, the X variable was removed; fifth, the classe variavle was combined with the remaining dataset.
+
+```{r}
+classe <- training$classe
+dim(training);dim(testing)
+x <- sapply(training, is.numeric)
+training <- training[, x]
+dim(training)
+variables <- names(training)
+max <- grep("^max", variables, value = T)
+min <- grep("^min", variables, value = T)
+avg <- grep("^avg", variables, value = T)
+var <- grep("^var", variables, value = T)
+std <- grep("^stddev", variables, value = T)
+amp <- grep("^amplitude", variables, value = T)
+NAs <- c(max, min, avg, var, std, amp, amp)
+val <- variables[! variables %in% NAs]
+training <- training[, val]
+training <- training[, -1]
+training <- cbind(training, classe)
+head(training)
+```
+
+## Building the prediction model using random forest algorithm. 10 fold cross validation was used to data split and 200 trees were evaluated.
+```{r}
+Mod1 <-train(classe ~., method = "rf", trControl = trainControl(method = "cv", number = 10), ntree = 200, data = training)
+```
+## predict the testing dataset
+```{r}
+testing <- testing[, val]
+testing <- testing[, -1]
+prediction <- predict(Mod1, testing)
+```
+## Evaluate the out of sample error for the final model and print the predicted classe for the testing dataset
+```{r}
+print(Mod1$finalModel)
+prediction
+```
