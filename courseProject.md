@@ -189,14 +189,14 @@ print(Mod1$finalModel)
 ##                      Number of trees: 200
 ## No. of variables tried at each split: 28
 ## 
-##         OOB estimate of  error rate: 0.05%
+##         OOB estimate of  error rate: 0.06%
 ## Confusion matrix:
 ##      A    B    C    D    E  class.error
 ## A 5580    0    0    0    0 0.0000000000
-## B    1 3795    1    0    0 0.0005267316
+## B    2 3794    1    0    0 0.0007900974
 ## C    0    4 3418    0    0 0.0011689071
-## D    0    0    2 3213    1 0.0009328358
-## E    0    0    0    0 3607 0.0000000000
+## D    0    0    3 3212    1 0.0012437811
+## E    0    0    0    1 3606 0.0002772387
 ```
 
 ```r
