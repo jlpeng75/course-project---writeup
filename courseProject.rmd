@@ -5,7 +5,7 @@ In this report we aim to build a machine learning algorithm to predict activity 
 
 
 ## Load the package needed for the tree classification
-```{r}
+```{r, }
 library(caret)
 ```
 ## Load the data
@@ -38,7 +38,7 @@ head(training)
 ```
 
 ## Building the prediction model using random forest algorithm. 10 fold cross validation was used to data split and 200 trees were evaluated.
-```{r}
+```{r, echo=T}
 Mod1 <-train(classe ~., method = "rf", trControl = trainControl(method = "cv", number = 10), ntree = 200, data = training)
 ```
 ## predict the testing dataset
@@ -48,7 +48,7 @@ testing <- testing[, -1]
 prediction <- predict(Mod1, testing)
 ```
 ## Evaluate the out of sample error for the final model and print the predicted classe for the testing dataset
-```{r}
+```{r, results= T}
 print(Mod1$finalModel)
 prediction
 ```
